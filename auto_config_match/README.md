@@ -2,7 +2,7 @@
 
 ## 🇵🇱 Opis (PL)
 
-**Autor:** Wiktor Gapiński
+**Autor:** Wiktor Gap----
 
 AutoConfigMatch to konsolowy program w C++, który umożliwia:
 
@@ -59,8 +59,7 @@ Modele w zakresie 5-15: Toyota, Audi
 
 ## 🇬🇧 English Version
 
-**Author:** Wiktor Gapiński
-
+**Author:** Wiktor Gapi---
 AutoConfigMatch is a command-line C++ application that lets you:
 
 1. Browse car model data (BMW)
