@@ -7,7 +7,7 @@ from fastai.vision.all import *
 import matplotlib.pyplot as plt
 
 
-access_key = "XJ23QJ-vuQT7LZ2wR7g6j8G-ZyhBV6ynGuzhK7B_pf8"
+access_key = "PASS YOUR OWN KEY I USE UNSPLASH API"
 current_path = os.getcwd()
 catalogName = "harrypotter"
 max_img = 50
