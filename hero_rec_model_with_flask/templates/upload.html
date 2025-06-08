@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Upload and Predict</title>
+    <style>
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-block;
+        }
+        input[type="file"] {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Upload your file (Harry Potter, Spiderman or Batman)</h1><br>
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <div>
+            <label for="fileToUpload" class="btn">Select Image</label>
+            <input id="fileToUpload" type="file" name="fileToUpload" required><br>
+        </div>
+        <input type="submit" value="Upload">
+    </form>
+
+    {% if uploaded %}
+        <p>File was uploaded successfully.</p><br>
+        <img src="{{ path }}" alt="Uploaded image" style="max-width:400px;"><br>
+        <p>Prediction: {{ prediction }}</p>
+    {% endif %}
+</body>
+</html>
