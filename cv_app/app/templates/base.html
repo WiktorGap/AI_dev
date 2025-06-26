@@ -1,0 +1,243 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}Wiktor Gapiński – About Me{% endblock %}
+
+{% block head %}
+{{ super() }}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+  
+  .navbar {
+    background: linear-gradient(90deg, #336699, #4a8cc7, #6aabe8);
+    padding: 0.6rem 1.5rem;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  .navbar-left { display: flex; align-items: center; }
+  .navbar-brand {
+    font-size: 2.8rem;
+    color: white !important;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    user-select: none;
+    pointer-events: none;
+    margin-right: 1.8rem;
+  }
+  .avatar {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background-image: url('/static/images/fotka.jpg');
+    background-size: cover;
+    background-position: center;
+    border: 2px solid white;
+    flex-shrink: 0;
+  }
+  .navbar-center {
+    position: absolute; left: 50%; transform: translateX(-50%);
+  }
+  .navbar-nav {
+    display: flex; gap: 4rem;
+    margin: 0; padding: 0; list-style: none;
+  }
+  .nav-link {
+    font-size: 2.4rem;
+    color: white !important;
+    font-weight: 700;
+    padding: 0.5rem 0;
+    cursor: pointer;
+  }
+  .nav-link:hover { color: #ffcd39 !important; }
+  .nav-item.active .nav-link { color: #ffe066 !important; }
+
+
+  body {
+    font-size: 1.25rem;
+  }
+  .container, .section-card {
+    font-size: 1.25rem;
+  }
+
+ 
+  .section-card {
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    padding: 2rem;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+  }
+
+  .section-header {
+    font-size: 2.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #336699;
+  }
+  .profile-img {
+    width: 220px; height: 220px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid #4a8cc7;
+  }
+  .lead-text {
+    font-size: 1.5rem;
+    line-height: 1.6;
+  }
+  .placeholder-box {
+    background-color: rgba(0,0,0,0.03);
+    padding: 1rem;
+    border: 1px dashed #ccc;
+    border-radius: 0.5rem;
+  }
+  .section-card + .section-card {
+    margin-top: 2.5rem;
+  }
+  a.section-link {
+    color: #336699;
+    font-weight: 500;
+    font-size: 1.5rem;
+  }
+  a.section-link:hover {
+    color: #224f88;
+    text-decoration: none;
+  }
+  h1 { font-size: 3.5rem; }
+  h2 { font-size: 2.5rem; }
+  h3 { font-size: 2rem; }
+  h5.card-title { font-size: 1.75rem; }
+</style>
+{% endblock %}
+
+{% block navbar %}
+<nav class="navbar">
+  <div class="navbar-left">
+    <span class="navbar-brand">Wiktor Gapiński</span>
+    <div class="avatar"></div>
+  </div>
+  <div class="navbar-center">
+    <ul class="navbar-nav">
+      <li class="nav-item active"><a class="nav-link" href="{{url_for('main.index')}}">About Me</a></li>
+      <li class="nav-item"><a class="nav-link" href="{{url_for('main.projects')}}">Projects</a></li>
+      <li class="nav-item"><a class="nav-link" href="{{url_for('main.aiprev')}}">AI Models</a></li>
+    </ul>
+  </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+ 
+  <div class="section-card">
+    <div class="row align-items-center">
+      <div class="col-md-4 text-center mb-4 mb-md-0">
+        <img src="/static/images/fotka.jpg"
+             alt="Photo of Wiktor Gapiński"
+             class="profile-img mx-auto d-block">
+      </div>
+      <div class="col-md-8">
+        <h2 class="section-header">About Me</h2>
+        <p class="lead-text">
+          Hello, I’m <strong>Wiktor Gapiński</strong>, and a student of Industrial Applications of Computer Science at the Warsaw University of Technology branch in Plock. I have experience gained while creating my projects in variety of fields:
+        </p>
+        <ul class="lead-text">
+          <li>Developing web applications </li>
+          <li>Designing and implementing machine learning and AI projects</li>
+          <li>Developing of relational databases</li>
+          <li>implementation of multi-process and parallel programs</li>
+          <li>programming of plc controllers and IoT such as Esp32 </li>
+          <li>solving problems in the world of Big Data</li>
+        </ul>
+        <p class="lead-text">
+          I enjoy continuously learning new technologies and carrying out projects from initial concept through to deployment, aiming to deliver robust and maintainable solutions.
+        </p>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="section-card">
+    <h3 class="section-header">What You’ll Find in Other Tabs</h3>
+    <ul class="lead-text list-unstyled">
+      <li>
+        <a href="{{url_for('main.projects')}}" class="section-link">Projects</a> – a comprehensive list of my projects including detailed technical descriptions, live demos, and links to their source code repositories.
+      </li>
+      <li>
+        <a href="{{url_for('main.aiprev')}}" class="section-link">AI Models</a> – interactive demonstrations of AI models I developed.
+      </li>
+    </ul>
+  </div>
+
+
+<div class="section-card">
+  <h3 class="section-header">Projects Preview </h3>
+  <div class="row">
+    <div class="col-md-6 mb-4">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Sales Forecasting Web App with Machine Learning</h5>
+          <p class="card-text lead-text">
+            Created a complete web application using Flask and PyTorch that connects to a Microsoft SQL Server database to display live sales data. Built a custom machine learning model from scratch to predict product profit and demand. The model is trained directly in the app and allows users to visualize forecasts in real time via interactive charts.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 mb-4">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Image Mosaic Generator in Python</h5>
+          <p class="card-text lead-text">
+            Created an application that assembles a large mosaic image from over 24,000 smaller images. Leveraged libraries such as PIL and NumPy alongside multiprocessing for performance optimization, enabling efficient handling of large datasets.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+  <div class="section-card">
+    <h3 class="section-header">Skills</h3>
+    <div class="row">
+      <div class="col-md-6">
+        <ul class="lead-text list-unstyled">
+          <li><strong>Programming Languages:</strong> Python, C#, C++,Kotlin</li>
+          <li><strong>Web & Frameworks:</strong> Flask, Android Compose</li>
+          <li><strong>Machine Learning & AI:</strong> PyTorch, fastai</li>
+        </ul>
+      </div>
+      <div class="col-md-6">
+        <ul class="lead-text list-unstyled">
+          <li><strong>Databases:</strong> Microsoft SQL Server, PostgreSQL, SQLite</li>
+
+
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="section-card">
+    <h3 class="section-header">Education & Certifications</h3>
+    <ul class="lead-text list-unstyled">
+      <li class="mb-2">
+        <strong>Warsaw University of Technology, Płock Branch</strong> (Oct 2023 – Present)<br>
+        Bachelor of Engineering in Industrial Applications of Computer Science (in progress)
+      </li>
+      <li class="mb-2">
+        <strong>First Certificate in English (FCE)</strong><br>
+        Organized by British Council, June 2023
+      </li>
+    </ul>
+  </div>
+
+ 
+  <div class="section-card">
+    <h3 class="section-header">Contact</h3>
+    <p class="lead-text">
+      <strong>Email:</strong> <a href="mailto:wiktorgapinski77@gmail.com">wiktorgapinski77@gmail.com</a><br>
+      <strong>Phone:</strong> +48 797 454 193<br>
+      <strong>GitHub:</strong> <a href="https://github.com/WiktorGap" target="_blank" rel="noopener">github.com/WiktorGap</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

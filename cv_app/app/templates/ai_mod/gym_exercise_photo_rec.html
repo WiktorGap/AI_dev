@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Gym Photo Recognition{% endblock %}
+
+{% block content %}
+<style>
+  body, html {
+    height: 100%;
+    margin: 0;
+    background: #f9fafb;
+  }
+  .content-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* start od góry */
+    align-items: center;         /* wyśrodkuj poziomo */
+    padding-top: 60px;           /* odległość od góry - możesz dostosować */
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 40px;
+  }
+  .prediction-badge {
+    background-color: #28a745;
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+  }
+  .prediction-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #222;
+    margin-left: 0.5rem;
+  }
+  .card-photo-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #6c757d; /* text-secondary */
+    margin-bottom: 1rem;
+  }
+  .hover-zoom:hover {
+    transform: scale(1.05);
+  }
+</style>
+
+<div class="content-container">
+
+  <h1 class="fw-bold mb-5" style="color: #2c3e50;">Gym Exercise Photo Recognition</h1>
+
+  <div class="card shadow-sm p-4 mb-4" style="max-width: 400px; width: 100%;">
+    <h4 class="card-title mb-3 text-center text-primary">Upload your gym photo</h4>
+
+    <form method="POST" action="" enctype="multipart/form-data">
+      {{ form.hidden_tag() }}
+
+      <div class="mb-3">
+        {{ form.photo.label(class="form-label") }}
+        {{ form.photo(class="form-control") }}
+        {% if form.photo.errors %}
+          <div class="text-danger mt-1">
+            {% for error in form.photo.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg w-100">Analyze</button>
+    </form>
+  </div>
+
+  {% if uploaded_image %}
+  <div class="card shadow border-0 mt-4" style="max-width: 400px; width: 100%;">
+    <div class="card-body text-center">
+      <h3 class="card-photo-title">Your photo</h3>
+      <img src="data:image/png;base64,{{ uploaded_image }}" alt="Uploaded photo"
+           class="img-fluid rounded mb-3 hover-zoom"
+           style="max-height: 400px; cursor: pointer; transition: transform 0.3s ease;">
+      <p>
+        <span class="badge prediction-badge">Prediction:</span>
+        <strong class="prediction-text">{{ prediction }}</strong>
+      </p>
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

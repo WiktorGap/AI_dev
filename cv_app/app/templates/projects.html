@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+{% block title %}Wiktor Gapiński – Projects{% endblock %}
+
+{% block content %}
+<style>
+  body {
+    background-color: #f8f9fa;
+  }
+  .project-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 15px;
+    border: none;
+    font-size: 1.2rem;
+  }
+  .project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 28px rgba(0, 0, 0, 0.1);
+  }
+  .tech-badge {
+    font-size: 1rem;
+    margin: 0 5px;
+  }
+  .section-description {
+    max-width: 1000px;
+    margin: 0 auto;
+    font-size: 1.5rem;
+    color: #4a4a4a;
+    line-height: 1.8;
+  }
+  .card-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+  }
+  .card-text {
+    font-size: 1.3rem;
+    line-height: 1.6;
+  }
+  .row-cols-1 > .col {
+    margin-bottom: 50px;
+  }
+</style>
+
+<div class="container py-5">
+  <h1 class="text-center fw-bold mb-4" style="color: #2c3e50; font-size: 3rem;">My Projects</h1>
+  <p class="section-description text-center mb-5">
+    Welcome to the <strong>Projects</strong> section, where I showcase some of my favorite personal and professional projects – each created with passion and a hunger for learning. These works span across a range of domains, including mobile development, artificial intelligence, desktop applications, and IoT systems. Through them, I've developed real-world problem-solving skills, explored modern technologies, and deepened my expertise as a software engineer.<br><br>
+    The order of the projects is <strong>completely random</strong> – each one holds its own importance and brought valuable experience, regardless of its placement.
+    <strong>Feel free to visit my GitHub for more projects and code: <a href="https://github.com/WiktorGap" target="_blank" rel="noopener noreferrer">https://github.com/WiktorGap</a></strong>
+  </p>
+
+  <div class="row row-cols-1 row-cols-md-2 g-5">
+
+
+    <!-- PROJECT 1 -->
+    <div class="col">
+      <div class="card project-card h-100 p-4 shadow-sm bg-white">
+        <div class="card-body">
+          <h4 class="card-title text-primary">1. Gym Photo Classifier</h4>
+          <p class="card-text">This project implements a fully automated image classification pipeline using FastAI, designed as a backend component for a web application that identifies gym exercises and equipment from uploaded photos. Key features include:
+            <ul> 
+            <li>Automated dataset preparation: the script prepares the dataset folder, renames image files to a standardized format, and generates the labels.csv file with appropriate multi-label annotations (e.g., ['squat', 'barbell']).
+        
+            <li> Multi-label classification support – each image is associated with exactly two labels.
+        
+            <li>Custom normalization pipeline – using manually calculated mean and std values for image preprocessing.
+        
+            <li>Efficient data handling – includes data augmentation, resizing, and usage of ResNet50 for transfer learning.
+        
+           <li> Evaluation with F1 Score – the model is assessed using the multi-label F1 score after test-time augmentation (TTA).
+        
+            <li> Model export (gym_model.pkl) – ready for integration into the web front-end.
+            </ul>
+        
+        This project was built specifically to support a custom web interface for recognizing gym-related content in user-uploaded images. It is fully extendable and can be further improved or tested as needed.</p>
+          <p><strong>Technologies:</strong>
+            <span class="badge bg-secondary tech-badge">Python</span>
+            <span class="badge bg-secondary tech-badge">Flask</span>
+            <span class="badge bg-secondary tech-badge">PyTorch</span>
+            <span class="badge bg-secondary tech-badge">Bootstrap</span>
+          </p>
+        </div>
+        <a href="https://github.com/WiktorGap/AI_dev/blob/main/exercise_recognition_2_labels.py">Click here to get code</a>
+      </div>
+    </div>
+
+        <!-- PROJECT 2 -->
+        <div class="col">
+            <div class="card project-card h-100 p-4 shadow-sm bg-white">
+              <div class="card-body">
+                <h4 class="card-title text-primary">2.Sales Website with Artificial Neural Network for Demand and Profit Prediction </h4>
+                <p class="card-text">This project is a modern web application that employs an artificial neural network to analyze and predict sales data. The app retrieves data stored in an MSSQL database, displays the entire sales table through a Flask-based web interface, and then generates forecasts of future demand and potential profit based on the collected data.
+
+                    Predictions are visualized using dynamically generated Matplotlib charts, which are saved directly to an in-memory buffer — eliminating the need for static file storage and enhancing the app’s performance and flexibility.
+                    
+                    By leveraging a neural network model, the system learns from historical data and provides increasingly accurate sales forecasts, significantly aiding inventory optimization and strategic business planning.
+                    
+                    This project is an excellent example of integrating machine learning with a web application, enabling interactive data handling and real-time visualization of results directly within the browser.</p>
+                <p><strong>Technologies:</strong>
+                  <span class="badge bg-secondary tech-badge">Python</span>
+                  <span class="badge bg-secondary tech-badge">PyTorch</span>
+                  <span class="badge bg-secondary tech-badge">MSSQL</span>
+                </p>
+              </div>
+              <a href="https://github.com/WiktorGap/AI_dev/tree/main/sales_website_ann">Click here to get code</a>
+            </div>
+          </div>
+      
+          <!-- PROJECT 3 -->
+          <div class="col">
+            <div class="card project-card h-100 p-4 shadow-sm bg-white">
+              <div class="card-body">
+                <h4 class="card-title text-primary">3. Big Data Image Mosaic Generator Using Parallel Processing</h4>
+                <p class="card-text">This project is a hands-on demonstration of applying Big Data principles to image processing. The Python script generates a mosaic image by assembling thousands of small thumbnail images into a single, large, high-resolution picture. Each region of the input image is matched with the closest-fitting thumbnail based on color similarity.
+
+                    In our case, the dataset contained over 24,000 source images, which posed significant challenges in performance and memory usage. To address this, the script uses parallel data processing via Python's multiprocessing module and optimized matrix operations with NumPy.
+                    
+                    Project highlights:
+                    <ul>
+                    
+                        <li>Handles massive image datasets (24,000+ files)
+                    
+                        <li>Demonstrates practical use of Big Data in image analysis
+                    
+                        <li>Parallel processing significantly reduces execution time
+                    
+                        <li>Intelligent color matching to generate seamless mosaics
+                    
+                        <li>Custom techniques to manage high-volume visual data
+                    </ul>
+                    This project illustrates how unconventional and performance-driven solutions can be applied to real-world problems involving high-throughput image processing and large-scale data handling.</p>
+                <p><strong>Technologies:</strong>
+                  <span class="badge bg-secondary tech-badge">Python</span>
+                  <span class="badge bg-secondary tech-badge">Pillow</span>
+                  <span class="badge bg-secondary tech-badge">NumPy</span>
+                  <span class="badge bg-secondary tech-badge">Multiprocessing</span>
+                </p>
+              </div>
+              <a href="https://github.com/WiktorGap/Big-Data/blob/main/programs/makeMossaicMulti.py">Click here to get code</a>
+            </div>
+          </div>
+      
+          <!-- PROJECT 4 -->
+          <div class="col">
+            <div class="card project-card h-100 p-4 shadow-sm bg-white">
+              <div class="card-body">
+                <h4 class="card-title text-primary">5. Web and Mobile Application with Flask & Firebase Real-Time Database</h4>
+                <p class="card-text">This project is a full-featured web application complemented by a dedicated mobile app designed to display and manage data seamlessly. Built with a Flask backend and integrated with Firebase’s Real-Time Database, it showcases an efficient use of a NoSQL data model tailored for dynamic, real-time updates.
+
+                    The application provides comprehensive CRUD (Create, Read, Update, Delete) operations on a custom-defined JSON-based data structure representing patient information. Unlike many typical implementations that overwrite entire data nodes during updates, this system smartly updates only specific fields within the patient’s JSON tree, preserving data integrity and preventing accidental data loss.
+                    
+                    By demonstrating how to work with a non-relational database in a practical healthcare context, the app highlights key benefits of Firebase Real-Time Database such as instant synchronization, flexible data modeling, and robust multi-platform support. The mobile app complements the web frontend by providing easy access to real-time patient data on the go.
+                    <p><strong>Technologies:</strong>
+                    <span class="badge bg-secondary tech-badge">Python</span>
+                  <span class="badge bg-secondary tech-badge">Flask</span>
+                  <span class="badge bg-secondary tech-badge">Firebase</span>
+                  <span class="badge bg-secondary tech-badge">Kotlin</span>
+                </p>
+              </div>
+              <a href="https://github.com/WiktorGap/Firebase_with_flask_mobile/tree/Wiktor">Click here to get code</a>
+            </div>
+          </div>
+      
+          <!-- PROJECT 5 -->
+          <div class="col">
+            <div class="card project-card h-100 p-4 shadow-sm bg-white">
+              <div class="card-body">
+                <h4 class="card-title text-primary">5. Patient Management System – Windows Forms + SQL Server </h4>
+                <p class="card-text">Description:
+                    A desktop application built with C# and Windows Forms, designed to support front-desk operations in medical facilities. The system allows full management of patient records, including registration, data editing, visit tracking, and historical access. It connects directly to a Microsoft SQL Server database for efficient data storage and retrieval.
+                    
+                    Key Features:
+                    <ul> 
+                    
+                        <li>   View a complete list of patients and their information</li>
+                    
+                        <li>   Add new patients to the system and save their data permanently</li>
+                    
+                        <li>  Edit and delete patient records</li>
+                   
+                        <li>   Search functionality by surname</li>
+                    
+                        <li>  Direct integration with SQL Server using ADO.NET</li>
+                    
+                        <li>  Built-in validation of the PESEL (Polish national ID number) using custom user controls</li>
+                    
+                        <li>Custom form controls to enhance data integrity and user experience</li>
+                    
+                       <li> User-friendly interface tailored for reception staff</li>
+                    </ul></p>
+                <p><strong>Technologies:</strong>
+                  <span class="badge bg-secondary tech-badge">C#</span>
+                  <span class="badge bg-secondary tech-badge">SQL SERVER</span>
+                  <span class="badge bg-secondary tech-badge">Windows Forms</span>
+            
+                </p>
+              </div>
+              <a href="https://github.com/WiktorGap/Csharp/tree/main/system_with_db">Click here to get code</a>
+            </div>
+          </div>
+      
+
+    
+      
+     
+  </div>
+</div>
+{% endblock %}
