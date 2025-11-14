@@ -1,0 +1,6 @@
+Drogi Adminie,
+
+Otrzymałeś nową wiadomość od {{ name }} ({{ email }}).
+
+Treść wiadomości:
+{{ message }}

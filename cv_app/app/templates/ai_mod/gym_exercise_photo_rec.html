@@ -1,3 +1,5 @@
+
+
 {% extends "base.html" %}
 {% block title %}Gym Photo Recognition{% endblock %}
 
@@ -13,8 +15,8 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start; /* start od góry */
-    align-items: center;         /* wyśrodkuj poziomo */
-    padding-top: 60px;           /* odległość od góry - możesz dostosować */
+    align-items: center;       /* wyśrodkuj poziomo */
+    padding-top: 60px;         /* odległość od góry - możesz dostosować */
     padding-left: 20px;
     padding-right: 20px;
     padding-bottom: 40px;
@@ -45,6 +47,17 @@
 
   <h1 class="fw-bold mb-5" style="color: #2c3e50;">Gym Exercise Photo Recognition</h1>
 
+  <div class="alert alert-info shadow-sm" role="alert" style="max-width: 600px; width: 100%; margin-bottom: 2rem;">
+    <h5 class="alert-heading">Information</h5>
+    <p>
+      Currently, due to limited hosting resources, the AI model is not connected.
+      Because of this, the only prediction you can receive is <strong>'none'</strong>.
+    </p>
+    <hr>
+  <p class="mb-0">
+      If you wish to test the full functionality, you can download the source code and run the application locally with the model.
+    </p>
+  </div>
   <div class="card shadow-sm p-4 mb-4" style="max-width: 400px; width: 100%;">
     <h4 class="card-title mb-3 text-center text-primary">Upload your gym photo</h4>
 

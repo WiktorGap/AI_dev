@@ -1,0 +1,11 @@
+# Wirtualne środowisko
+venv/
+
+# Pliki cache Pythona
+__pycache__/
+*.pyc
+
+# Pliki systemowe
+.DS_Store
+*.sqlite3
+app.db

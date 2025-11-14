@@ -1,21 +1,24 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+
 from config import Config
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
+from flask_mail import Mail
 
 moment = Moment()
-db = SQLAlchemy()
+
 bootstrap = Bootstrap()
+mail = Mail()
 
 
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
-    db.init_app(app)
+   
     bootstrap.init_app(app)
     moment.init_app(app)
+    mail.init_app(app)
 
     from app.main import main as main_bp
     app.register_blueprint(main_bp)
