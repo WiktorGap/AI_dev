@@ -17,6 +17,10 @@ def projects():
 def aiprev():
     return render_template('ai_prev.html')
 
+@main.route('/interCharts',methods=['GET','POST'])
+def interCharts():
+    return render_template('interActiveCharts.html')
+
 
 @main.route('/contact', methods=['GET', 'POST'])
 def contact():

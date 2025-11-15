@@ -1,0 +1,391 @@
+{% extends 'base.html' %}
+{% block title %}Wiktor Gapiński – Interactive Charts{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+  <!-- ====================================================== -->
+  <!-- ===== SEKCJA 1: INTERAKTYWNY WYKRES IoT (NA ŻYWO) ===== -->
+  <!-- ====================================================== -->
+  <div class="section-card">
+    <h2 class="section-header">Live IoT Sensor Simulation</h2>
+    <p class="lead-text">
+      This chart demonstrates a real-time data stream, similar to one you would get from an IoT sensor (like an ESP32 monitoring temperature).
+      A new, random data point is generated every 2 seconds.
+    </p>
+    <div style="width: 100%; max-width: 800px; margin: 20px auto;">
+      <canvas id="liveSensorChart"></canvas>
+    </div>
+  </div>
+
+  <!-- ====================================================== -->
+  <!-- ===== SEKCJA 2: WIZUALIZATOR LOGIKI ROZMYTEJ (FUZZY) ===== -->
+  <!-- ====================================================== -->
+  <div class="section-card">
+    <h2 class="section-header">Fuzzy Logic Controller Visualizer</h2>
+    <p class="lead-text">
+      The purpouse of this charts is to  display fuzzy logic implemented in humidity sensor. It calculates the ideal power for a humidifier based on environmental inputs and price of energy.
+    </p>
+    
+    <!-- Suwaki do interaktywnej zmiany danych wejściowych -->
+    <div class="row">
+      <div class="col-md-6">
+        <label for="humiditySlider" class="form-label lead-text">Humidity: <span id="humidityValue">66</span>%</label>
+        <input type="range" class="form-range" min="0" max="100" value="66" id="humiditySlider">
+      </div>
+      <div class="col-md-6">
+        <label for="tempSlider" class="form-label lead-text">Temperature: <span id="tempValue">37</span>°C</label>
+        <input type="range" class="form-range" min="-10" max="40" value="37" id="tempSlider">
+      </div>
+    </div>
+    
+    <!-- Wykresy 1D dla Funkcji Przynależności -->
+    <div class="row mt-4">
+      <div class="col-md-6">
+        <h4 class="text-center" style="font-size: 1.5rem;">Humidity </h4>
+        <canvas id="humidityChart"></canvas>
+      </div>
+      <div class="col-md-6">
+        <h4 class="text-center" style="font-size: 1.5rem;">Temperature </h4>
+        <canvas id="tempChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Wykres 3D -->
+    <div class="text-center mt-5">
+      <h3 class="section-header" style="font-size: 1.8rem;">3D Controller Characteristic</h3>
+      <p class="lead-text">Click the button to generate the 3D surface plot .</p>
+      <button id="generate3DPlot" class="btn btn-primary btn-lg">Generate 3D Plot</button>
+      <div id="plot3D" class="mt-3" style="width: 100%; min-height: 600px;"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Importujemy biblioteki Chart.js ORAZ Plotly.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+<!-- ====================================================== -->
+<!-- ===== GŁÓWNY SKRYPT DLA TEJ STRONY ===== -->
+<!-- ====================================================== -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    
+    // ===================================
+    // Logika dla Wykresu IoT (Sekcja 1)
+    // ===================================
+    const ctxLive = document.getElementById('liveSensorChart').getContext('2d');
+    const primaryColor = 'rgba(51, 102, 153, 0.6)';
+    const primaryBorder = 'rgba(51, 102, 153, 1)';
+
+    const liveChart = new Chart(ctxLive, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Temperature (°C)',
+          data: [],
+          fill: true,
+          backgroundColor: primaryColor,
+          borderColor: primaryBorder,
+          tension: 0.1
+        }]
+      },
+      options: { /* Opcje dla wykresu na żywo */ }
+    });
+
+    function updateLiveChart() {
+      const now = new Date();
+      const timeLabel = now.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      const newData = Math.random() * 10 + 20;
+
+      liveChart.data.labels.push(timeLabel);
+      liveChart.data.datasets[0].data.push(newData.toFixed(2));
+
+      if (liveChart.data.labels.length > 15) {
+        liveChart.data.labels.shift();
+        liveChart.data.datasets[0].data.shift();
+      }
+      liveChart.update();
+    }
+    setInterval(updateLiveChart, 2000);
+
+    // ===================================
+    // Logika dla Fuzzy Logic (Sekcja 2)
+    // ===================================
+
+    // --- Tłumaczenie Twojego kodu Python na JavaScript ---
+
+    // Funkcje pomocnicze
+    const linspace = (start, stop, num) => {
+        const arr = [];
+        const step = (stop - start) / (num - 1);
+        for (let i = 0; i < num; i++) {
+            arr.push(start + step * i);
+        }
+        return arr;
+    };
+    
+    const gaussian_mf = (x, mu, sig) => {
+        return Math.exp(-Math.pow(x - mu, 2.0) / (2 * Math.pow(sig, 2.0)));
+    };
+
+    // Definicje (MF = Membership Functions)
+    const mf_humidity = { 'DRY': [0.2, 0.15], 'COMFORT': [0.5, 0.15], 'WET': [0.8, 0.15] };
+    const mf_temp = { "COLD": [-5.0, 5.0], "MEDIUM": [15.0, 5.0], "WARM": [25.0, 5.0] };
+    const mf_price = { "CHEAP": [0.7, 0.2], "EXPENSIVE": [1.3, 0.2] };
+    const mf_power = { 'OFF': [0.0, 15.0], 'LOW': [50.0, 20.0], 'HIGH': [100.0, 15.0] };
+    const weights = {'humidity': 0.78, 'temp': 0.22, 'price': 0.5};
+    const rules = [
+        [['WET', null, null], 'OFF'],
+        [['DRY', 'COLD', 'CHEAP'], 'HIGH'],
+        [['DRY', 'MEDIUM', 'CHEAP'], 'HIGH'],
+        [['DRY', 'WARM', 'CHEAP'], 'HIGH'],
+        [['DRY', 'COLD', 'EXPENSIVE'], 'LOW'],
+        [['DRY', 'MEDIUM', 'EXPENSIVE'], 'LOW'],
+        [['DRY', 'WARM', 'EXPENSIVE'], 'LOW'],
+        [['COMFORT', 'COLD', 'EXPENSIVE'], 'OFF'],
+        [['COMFORT', 'MEDIUM', 'EXPENSIVE'], 'OFF'],
+        [['COMFORT', 'WARM', 'EXPENSIVE'], 'OFF'],
+        [['COMFORT', 'COLD', 'CHEAP'], 'LOW'],
+        [['COMFORT', 'MEDIUM', 'CHEAP'], 'OFF'],
+        [['COMFORT', 'WARM', 'CHEAP'], 'OFF'],
+    ];
+
+    // Bloki logiki (przetłumaczone z Pythona)
+    function fuzzificationBlock(crispInputs) {
+        const { humidity: h, temp: t, price: p } = crispInputs;
+        const fuzzifiedVals = { 'humidity': {}, 'temp': {}, 'price': {} };
+
+        for (const [label, params] of Object.entries(mf_humidity)) {
+            const [mu, sig] = params;
+            fuzzifiedVals['humidity'][label] = gaussian_mf(h, mu, sig);
+        }
+        for (const [label, params] of Object.entries(mf_temp)) {
+            const [mu, sig] = params;
+            fuzzifiedVals['temp'][label] = gaussian_mf(t, mu, sig);
+        }
+        for (const [label, params] of Object.entries(mf_price)) {
+            const [mu, sig] = params;
+            fuzzifiedVals['price'][label] = gaussian_mf(p, mu, sig);
+        }
+        return fuzzifiedVals;
+    }
+
+    function interferencingBlock(fuzzifiedVals, rules, weights) {
+        const modes = { "OFF": 0.0, "LOW": 0.0, "HIGH": 0.0 };
+
+        for (const [conditions, outputMode] of rules) {
+            const [humidityLbl, tempLbl, priceLbl] = conditions;
+            let activeWeights = [];
+            let weightedVals = [];
+
+            if (humidityLbl) {
+                const humVal = fuzzifiedVals['humidity'][humidityLbl];
+                const humidityWeight = weights['humidity'];
+                activeWeights.push(humidityWeight);
+                weightedVals.push(humidityWeight * humVal);
+            }
+            if (tempLbl) {
+                const tempVal = fuzzifiedVals['temp'][tempLbl];
+                const tempWeight = weights['temp'];
+                activeWeights.push(tempWeight);
+                weightedVals.push(tempWeight * tempVal);
+            }
+            if (priceLbl) {
+                const priceVal = fuzzifiedVals['price'][priceLbl];
+                const priceWeight = weights['price'];
+                activeWeights.push(priceWeight);
+                weightedVals.push(priceVal * priceWeight);
+            }
+
+            if (activeWeights.length === 0) continue;
+
+            const sumWeightedVals = weightedVals.reduce((a, b) => a + b, 0);
+            const sumActiveWeights = activeWeights.reduce((a, b) => a + b, 0);
+            const ruleStrength = sumWeightedVals / sumActiveWeights;
+
+            modes[outputMode] = Math.max(modes[outputMode], ruleStrength);
+        }
+        return modes;
+    }
+
+    function sharpeningBlock(modes, mf_power) {
+        const xOutput = linspace(0, 100, 100);
+        const yOutput = new Array(100).fill(0);
+
+        const { OFF: off, LOW: low, HIGH: high } = modes;
+        const [mu_off, sig_off] = mf_power['OFF'];
+        const [mu_low, sig_low] = mf_power['LOW'];
+        const [mu_high, sig_high] = mf_power['HIGH'];
+
+        let ySum = 0;
+        let xySum = 0;
+
+        for (let i = 0; i < xOutput.length; i++) {
+            const x = xOutput[i];
+            const val_off = gaussian_mf(x, mu_off, sig_off);
+            const val_low = gaussian_mf(x, mu_low, sig_low);
+            const val_high = gaussian_mf(x, mu_high, sig_high);
+
+            const clipped_off = Math.min(val_off, off);
+            const clipped_low = Math.min(val_low, low);
+            const clipped_high = Math.min(val_high, high);
+            
+            yOutput[i] = Math.max(clipped_off, clipped_low, clipped_high);
+
+            ySum += yOutput[i];
+            xySum += x * yOutput[i];
+        }
+
+        if (ySum === 0) return 0.0;
+        return xySum / ySum; // Centroid
+    }
+    
+    // --- Koniec Tłumaczenia Logiki ---
+
+
+    // --- Logika dla wykresów 1D (Funkcje Przynależności) ---
+    const humiditySlider = document.getElementById('humiditySlider');
+    const tempSlider = document.getElementById('tempSlider');
+    const humidityValue = document.getElementById('humidityValue');
+    const tempValue = document.getElementById('tempValue');
+
+    const createMfChart = (ctx, mf_def, xMin, xMax, step) => {
+        const labels = [];
+        for(let i = xMin; i <= xMax; i += step) {
+            labels.push(i.toFixed(1));
+        }
+        const datasets = Object.entries(mf_def).map(([label, params]) => {
+            const [mu, sig] = params;
+            return {
+                label: label,
+                data: labels.map(x => gaussian_mf(parseFloat(x), mu, sig)),
+                borderColor: `rgba(${Math.random()*255},${Math.random()*255},${Math.random()*255},1)`,
+                borderWidth: 2,
+                fill: false,
+                tension: 0.1
+            }
+        });
+        
+        return new Chart(ctx, {
+            type: 'line',
+            data: { labels, datasets },
+            options: {
+                responsive: true,
+                scales: { y: { beginAtZero: true, max: 1.1 } },
+                plugins: {
+                    legend: { position: 'top' },
+                    annotation: { // Wtyczka do rysowania pionowej linii
+                        annotations: {
+                            line: {
+                                type: 'line',
+                                mode: 'vertical',
+                                scaleID: 'x',
+                                value: 0,
+                                borderColor: 'red',
+                                borderWidth: 2,
+                                label: {
+                                    content: 'Input',
+                                    enabled: true,
+                                    position: 'top'
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    };
+
+    // Stwórz wykresy 1D
+    const humChart = createMfChart(document.getElementById('humidityChart').getContext('2d'), mf_humidity, 0, 1, 0.01);
+    const tempChart = createMfChart(document.getElementById('tempChart').getContext('2d'), mf_temp, -10, 40, 0.5);
+    
+    // Funkcja do aktualizacji pionowych linii
+    function updateLines() {
+        const humVal = parseFloat(humiditySlider.value) / 100.0;
+        const tempVal = parseFloat(tempSlider.value);
+        
+        humidityValue.textContent = humiditySlider.value;
+        tempValue.textContent = tempSlider.value;
+        
+        humChart.options.plugins.annotation.annotations.line.value = humVal.toFixed(2);
+        tempChart.options.plugins.annotation.annotations.line.value = tempVal;
+        
+        humChart.update();
+        tempChart.update();
+    }
+    
+    // Podłącz suwaki do funkcji aktualizacji
+    humiditySlider.addEventListener('input', updateLines);
+    tempSlider.addEventListener('input', updateLines);
+    // Uruchom raz na starcie
+    updateLines();
+
+
+    // --- Logika dla wykresu 3D ---
+    document.getElementById('generate3DPlot').addEventListener('click', () => {
+        const fixed_price = 1.3; // Z Twojego kodu
+        const H_axis = linspace(0, 100, 25); // 25x25 grid dla wydajności
+        const T_axis = linspace(-10, 40, 25);
+        
+        let H = [];
+        let T = [];
+        let Z = [];
+
+        // Generuj dane do wykresu
+        for (let i = 0; i < T_axis.length; i++) {
+            let Z_row = [];
+            let H_row = [];
+            let T_row = [];
+            for (let j = 0; j < H_axis.length; j++) {
+                const currentHum = H_axis[j];
+                const currentTemp = T_axis[i];
+                const currentHumScaled = currentHum / 100.0;
+
+                const inputs = {'humidity': currentHumScaled, 'temp': currentTemp, 'price': fixed_price};
+                const fuzz = fuzzificationBlock(inputs);
+                const modes = interferencingBlock(fuzz, rules, weights);
+                const sharp_output = sharpeningBlock(modes, mf_power);
+
+                Z_row.push(sharp_output);
+                H_row.push(currentHum);
+                T_row.push(currentTemp);
+            }
+            Z.push(Z_row);
+            H.push(H_row); // Zwróć uwagę, że Plotly potrzebuje danych inaczej niż meshgrid
+            T.push(T_row);
+        }
+
+        // Definicja danych dla Plotly
+        const data = [{
+            z: Z,          // Macierz 2D z wartościami Z
+            x: H_axis,     // Oś X (Wilgotność)
+            y: T_axis,     // Oś Y (Temperatura)
+            type: 'surface',
+            colorscale: 'Viridis' // Tak jak w Matplotlib
+        }];
+
+        // Layout (wygląd) wykresu
+        const layout = {
+            title: `Controller Characteristic (Price = ${fixed_price})`,
+            scene: {
+                xaxis: { title: 'Humidity (%)' },
+                yaxis: { title: 'Temperature (°C)' },
+                zaxis: { title: 'Humidifier Power (%)' },
+                camera: { eye: { x: 1.8, y: -1.8, z: 1.2 } } // Podobny kąt widzenia
+            },
+            autosize: true,
+            margin: { l: 65, r: 50, b: 65, t: 90 }
+        };
+
+        // Renderuj wykres
+        Plotly.newPlot('plot3D', data, layout);
+    });
+
+  });
+</script>
+{% endblock %}
