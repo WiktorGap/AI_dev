@@ -14,6 +14,8 @@
     display: flex;
     align-items: center;
     position: relative;
+    /* Dodajemy, aby zawijanie działało poprawnie na urządzeniach mobilnych */
+    flex-wrap: wrap; 
   }
   .navbar-left { display: flex; align-items: center; }
   .navbar-brand {
@@ -47,6 +49,8 @@
     font-weight: 700;
     padding: 0.5rem 0;
     cursor: pointer;
+    /* Zapobiega łamaniu słów (ważne dla "AI and 'Fancy' Algorithms") */
+    white-space: nowrap;
   }
   .nav-link:hover { color: #ffcd39 !important; }
   .nav-item.active .nav-link { color: #ffe066 !important; }
@@ -59,7 +63,7 @@
     font-size: 1.25rem;
   }
 
- 
+  
   .section-card {
     background-color: #ffffff;
     border-radius: 0.5rem;
@@ -105,6 +109,59 @@
   h2 { font-size: 2.5rem; }
   h3 { font-size: 2rem; }
   h5.card-title { font-size: 1.75rem; }
+
+
+  /* ====================================================== */
+  /* ===== POCZĄTEK BLOKU RESPONSIVE (DLA URZĄDZEŃ MOBILNYCH) ===== */
+  /* ====================================================== */
+
+  /* Stosuj te style, gdy ekran jest węższy niż 992px */
+  @media (max-width: 992px) {
+    .navbar {
+      /* Zmieniamy navbar na pionowy */
+      flex-direction: column;
+      padding: 1rem;
+      align-items: center; /* Wyśrodkuj logo */
+    }
+
+    .navbar-left {
+      margin-bottom: 1rem; /* Odstęp między logo a linkami */
+    }
+  
+    .navbar-center {
+      /* Wyłączamy pozycjonowanie absolutne */
+      position: static;
+      transform: none;
+      left: auto;
+      width: 100%;
+    }
+  
+    .navbar-nav {
+      /* Linki mają być w kolumnie, nie w rzędzie */
+      flex-direction: column;
+      /* Wyśrodkowujemy linki w pionie */
+      align-items: center;
+      /* Zmniejszamy odstęp */
+      gap: 1rem; 
+      width: 100%;
+    }
+  
+    .nav-link {
+      /* Zmniejszamy czcionkę na mobilnych */
+      font-size: 1.6rem; 
+      padding: 0.25rem 0;
+    }
+  
+    .navbar-brand {
+      /* Zmniejszamy czcionkę brandu */
+      font-size: 2.2rem;
+    }
+  }
+
+  /* ====================================================== */
+  /* ====== KONIEC BLOKU RESPONSIVE (DLA URZĄDZEŃ MOBILNYCH) ====== */
+  /* ====================================================== */
+
 </style>
 {% endblock %}
 
@@ -153,7 +210,7 @@
        <p class="lead-text">
         I enjoy continuously learning new technologies and carrying out projects from initial concept through to deployment, aiming to deliver robust and maintainable solutions.
         I am also keenly interested in the development of industrial automation and apparatus.
-      </p>
+       </p>
       </div>
     </div>
   </div>
